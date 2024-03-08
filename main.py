@@ -9,37 +9,54 @@ GREEN = "#9bdeac"
 YELLOW = "#f7f5dd"
 RED_SOFT="#FF8E8F"
 FONT_NAME = "Courier"
-WORK_MIN = 25
-SHORT_BREAK_MIN = 5
+WORK_MIN = 0.1
+SHORT_BREAK_MIN = 0.2
 LONG_BREAK_MIN = 20
 
 # ---------------------------- TIMER RESET ------------------------------- # 
 
 # ---------------------------- TIMER MECHANISM ------------------------------- # 
+#TODO: FUNCION CON LA LOGICA DEL METODO POMODORO 4 REPS X 25 MITS, Y 5 MINTS BREAK
+
 #variable global que almacena la repeticion actual del pomodoro
 reps=1
 
 #funcion que se ejecutara despues de oprimir el boton start
 def start_pomodoro():
-    global reps #para poder trabajar con variables globales
-    work_seconds =WORK_MIN*60
+    # Hacemos que la variable 'reps' sea global para poder modificarla dentro de esta función
+    global reps 
+
+    # Convertimos los minutos de trabajo y descanso en segundos
+    work_seconds = WORK_MIN * 60
+    short_break_seconds = SHORT_BREAK_MIN * 60
+    long_break_seconds = LONG_BREAK_MIN * 60
     
-    short_break_seconds = SHORT_BREAK_MIN*60
-    
-    long_break_seconds = LONG_BREAK_MIN*60
-    
-    if reps==1 or reps==3 or reps==5 or reps==7:
+    # Si estamos en un ciclo de trabajo (1, 3, 5, 7)
+    if reps == 1 or reps == 3 or reps == 5 or reps == 7:
+        # Configuramos la etiqueta del temporizador para mostrar "WORK"
+        timer_label.config(text="WORK", bg=YELLOW, fg=GREEN, font=(FONT_NAME, 35, "bold"))
+        # Iniciamos la cuenta regresiva con el tiempo de trabajo
         countdown(work_seconds)
-    elif reps==2 or reps==4 or reps==6:
+                   
+    # Si estamos en un ciclo de descanso corto (2, 4, 6)
+    elif reps == 2 or reps == 4 or reps == 6:
+        # Configuramos la etiqueta del temporizador para mostrar "BREAK"
+        timer_label.config(text="BREAK", bg=YELLOW, fg=PINK, font=(FONT_NAME, 35, "bold"))
+        # Iniciamos la cuenta regresiva con el tiempo de descanso corto
         countdown(short_break_seconds)
-    elif reps==8:
+    
+    # Si estamos en un ciclo de descanso largo (8)
+    elif reps == 8:
+        # Configuramos la etiqueta del temporizador para mostrar "BREAK"
+        timer_label.config(text="BREAK", bg=YELLOW, fg=RED, font=(FONT_NAME, 35, "bold"))
+        # Iniciamos la cuenta regresiva con el tiempo de descanso largo
         countdown(long_break_seconds)
 
 
-#TODO: FUNCION DE CUENTA REGRESIVA DESDE 25 MINUTOS
+#TODO: FUNCION DE CUENTA REGRESIVA, RECIBE COMO PARAMETRO TIEMPO EN SEGUNDOS, YA SEA  TIEMPO DE TRABAJO O DESCANSO 
 def countdown(count_seconds):
     global reps
-    
+    global checkmark
     # el cociente sería el número de minutos completos y el residuo sería el número de segundos restantes
     seconds = count_seconds%60    
        
@@ -63,7 +80,11 @@ def countdown(count_seconds):
         # after() se utiliza para programar una función para que se ejecute después de un número específico de milisegundos
         window.after(1000, countdown, count_seconds-1)
     
-    if minutes == 0 and count_seconds==0:
+    else:
+        
+        if reps%2 !=0:
+            checkmark+='✔️'
+            checkmark_label.config(text=checkmark,  bg=YELLOW, fg=GREEN, font=(FONT_NAME, 15, "bold" ))
         reps+=1
         start_pomodoro()
 # ---------------------------- UI SETUP ------------------------------- #
@@ -96,13 +117,12 @@ timer_text=canvas.create_text(110,130, text="00:00 ",  font=(FONT_NAME, 35, "bol
 canvas.grid(row=1, column=1)
 
 
-#TODO: CREANDO BOTONES 'START', 'RESERT' Y LABEL CON TITULO 'TIMER'
+#TODO: CREANDO BOTONES 'START', 'RESERT', 'CHECKMARK' Y LABEL CON TITULO 'TIMER'
 timer_label=Label(text="TIMER",  bg=YELLOW, fg=GREEN, font=(FONT_NAME, 35, "bold" ))
 timer_label.grid(row=0, column=1, pady=2)
 
 #boton start
-#convirtiendo el tiempo total de trabajo en minutos a segundos
-
+#hemos convertido el tiempo total de trabajo en minutos a segundos
 start_button=Button(text="start", relief="groove", bg="white", command=start_pomodoro)
 start_button.grid(row=2, column=0)
 
@@ -111,7 +131,7 @@ reset_button=Button(text="reset", relief="groove", bg=RED_SOFT)
 reset_button.grid(row=2, column=2)
 
 #checkmark
-checkmark="✔"
+checkmark=""
 checkmark_label=Label(text=checkmark,  bg=YELLOW, fg=GREEN, font=(FONT_NAME, 15, "bold" ))
 checkmark_label.grid(row=2, column=1, pady=2)
 
