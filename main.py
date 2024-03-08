@@ -9,7 +9,7 @@ GREEN = "#9bdeac"
 YELLOW = "#f7f5dd"
 RED_SOFT="#FF8E8F"
 FONT_NAME = "Courier"
-WORK_MIN = 0.1
+WORK_MIN = 25
 SHORT_BREAK_MIN = 5
 LONG_BREAK_MIN = 20
 
