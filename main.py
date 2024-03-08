@@ -13,6 +13,7 @@ WORK_MIN = 0.1
 SHORT_BREAK_MIN = 0.2
 LONG_BREAK_MIN = 20
 
+
 # ---------------------------- TIMER RESET ------------------------------- # 
 #TODO: AL OPRIMIR EL BOTON RESET SE DEBE RESETEAR EL POMODORO
 def reset_timer():
@@ -21,21 +22,22 @@ def reset_timer():
     global checkmark
 
     # Configuramos la etiqueta del temporizador para mostrar "TIMER"
-    timer_label.config(text="TIMER",  bg=YELLOW, fg=GREEN, font=(FONT_NAME, 35, "bold" ))
+    timer_label.config(text="TIMER")
 
     # Reiniciamos el número de repeticiones a 0
-    reps = 0
+    reps = 1
 
     # Limpiamos los checkmarks
     checkmark = ""
-    checkmark_label.config(text=checkmark,  bg=YELLOW, fg=GREEN, font=(FONT_NAME, 15, "bold" ))
+    checkmark_label.config(text=checkmark)
 
     # Cancelamos la función programada con 'after'
     window.after_cancel(after_funcion)
 
     # Restablecemos el texto del temporizador a "00:00"
-    canvas.itemconfig(timer_text, text=("00:00"))
+    canvas.itemconfig(timer_text, text="00:00")
 
+    
     
     
 # ---------------------------- TIMER MECHANISM ------------------------------- # 
@@ -110,6 +112,7 @@ def countdown(count_seconds):
     if count_seconds >0:
         # after() se utiliza para programar una función para que se ejecute después de un número específico de milisegundos
         after_funcion=window.after(1000, countdown, count_seconds-1)
+        
     
     else:
         # Si estamos en un ciclo de trabajo (es decir es　'reps' es impar), añadimos un checkmark
@@ -159,11 +162,11 @@ timer_label.grid(row=0, column=1, pady=2)
 
 #boton start
 #hemos convertido el tiempo total de trabajo en minutos a segundos
-start_button=Button(text="start", relief="groove", bg="white", command=start_pomodoro)
+start_button=Button(text="start", relief="groove", bg="white",  command=start_pomodoro)
 start_button.grid(row=2, column=0)
 
 #boton reset
-reset_button=Button(text="reset", relief="groove", bg=RED_SOFT, command=reset_timer)
+reset_button=Button(text="reset", relief="groove", bg=RED_SOFT,  command=reset_timer)
 reset_button.grid(row=2, column=2)
 
 #checkmark
